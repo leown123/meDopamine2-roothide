@@ -327,8 +327,8 @@ static int spawn_exec_hook_common(const char *path,
 
   		if (string_has_suffix(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
 		{
-	 		shouldInsertJBEnv = false;
-			break;	
+	 		//shouldInsertJBEnv = false;
+			//break;	
 		}
 
   		if (string_has_suffix(path, "/smoba.app/smoba"))
