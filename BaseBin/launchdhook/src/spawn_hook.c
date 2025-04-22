@@ -148,9 +148,25 @@ int __posix_spawn_hook(pid_t *restrict pid, const char *restrict path,
 #include <libjailbreak/log.h>
 #import "../systemhook/src/envbuf.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define POSIX_SPAWN_PROC_TYPE_DRIVER 0x700
 
 int posix_spawnattr_getprocesstype_np(const posix_spawnattr_t *__restrict, int *__restrict) __API_AVAILABLE(macos(10.8), ios(6.0));
+
+void JBLogDebugnew3(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+
+	FILE *launchdLog = fopen("/var/mobile/spawn.log", "a");
+	vfprintf(launchdLog, format, va);
+	fprintf(launchdLog, "\n");
+	fclose(launchdLog);
+
+	va_end(va);	
+}
 
 bool string_has_suffix1(const char* str, const char* suffix)
 {
@@ -275,14 +291,14 @@ int __posix_spawn_hook(pid_t *restrict pidp, const char *restrict path, struct _
 	if (string_has_suffix1(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
 	{
  		
-		bool isblack = false;
+		JBLogDebugnew("小罪add： path：%s",path);
 		char *JB_BootUUID = NULL;
 		char *JB_RootPath = NULL;
        	 	char *JB_SandboxExtensions = NULL;
 		bool gFullyDebugged = false;
 		jbclient_process_checkin(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
 		jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
-		isblack = true;
+		
 			
 	}
 	
