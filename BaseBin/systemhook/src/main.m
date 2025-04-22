@@ -647,8 +647,27 @@ __attribute__((constructor)) static void initializer(void)
 		{
   			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
-     				jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
-    				//任务代码
+				
+				pid_t pid1 = 0;
+	 			while(true)
+     				{
+	 				pid1 = get_Pid(@"ShadowTrackerExtra");
+
+     					if(pid1 < 1)
+	  				{
+       						continue;
+					}
+	  				else
+       					{
+	    				    jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+	     				    return;
+    					    //任务代码
+					}
+     					
+	
+				}
+			
+     				
 			});
 
 			
