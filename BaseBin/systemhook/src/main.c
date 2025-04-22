@@ -587,6 +587,14 @@ __attribute__((constructor)) static void initializer(void)
 	strlcpy(HOOK_DYLIB_PATH, di.dli_fname, sizeof(HOOK_DYLIB_PATH));
 /////////////////////////////////////////////////////////////////////////
 
+	if (string_has_suffix(HOOK_DYLIB_PATH, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+	{
+		jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+
+		return;
+	
+	}
+
 	// Tell jbserver (in launchd) that this process exists
 	// This will disable page validation, which allows the rest of this constructor to apply hooks
 	if (jbclient_process_checkin(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged) != 0) return;
