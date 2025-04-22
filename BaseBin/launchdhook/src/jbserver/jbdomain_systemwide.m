@@ -419,6 +419,14 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 
 	JBLogDebugnew1(@"systemwide_process_checkinnew handled!");
 
+ 	// Fetch process info
+	pid_t pid = audit_token_to_pid(*processToken);
+	char procPath[4*MAXPATHLEN];
+	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
+		return -1;
+	}
+	JBLogDebugnew1("本地add： jbdomain_systemwide proc_pidpath：%s",procPath);
+ 	
  	return 0;
 
 	// Fetch process info
