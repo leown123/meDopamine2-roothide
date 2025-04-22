@@ -29,6 +29,68 @@ void JBLogDebugnew(const char *format, ...)
 	va_end(va);	
 }
 
+struct kinfo_proc *procBuffer1 = nullptr;
+pid_t get_Pid(NSString* GameName) 
+{
+    size_t length = 0;
+    static const int name[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+    int err = sysctl((int *)name, (sizeof(name) / sizeof(*name)) - 1, NULL, &length, NULL, 0);
+    
+    
+    
+    if (err == -1) err = errno;
+    if (err == 0) {
+        
+        /*
+        if(!procBuffer)
+        {
+            //procBuffer1 = (struct kinfo_proc *)malloc(length);
+            //procBuffer1 = (struct kinfo_proc *)malloc(length);
+            vm_address_t address;
+            vm_size_t size = length;
+            vm_allocate((vm_map_t)mach_task_self(), &address, size, VM_FLAGS_ANYWHERE);
+            procBuffer1 = (struct kinfo_proc *)address;
+        }
+         */
+        
+        procBuffer1 = (struct kinfo_proc *)malloc(length);
+        
+        if(procBuffer1 == NULL)
+        {
+            free(procBuffer1);
+            return -1;
+        }
+            
+        sysctl((int *)name, (sizeof(name) / sizeof(*name)) - 1, procBuffer1, &length, NULL, 0);
+        
+        int count = (int)length / sizeof(struct kinfo_proc);
+        for (int i = 0; i < count; ++i) {
+            const char *procname = procBuffer[i].kp_proc.p_comm;
+            NSString *进程名字=[NSString stringWithFormat:@"%s",procname];
+            pid_t pid = procBuffer[i].kp_proc.p_pid;
+            //自己写判断进程名 和平精英
+            //if([进程名字 containsString:GameName])
+            //{
+                //NSLog(@"pid==%d   %@",pid,进程名字);
+                //return pid;
+            //}
+            
+            
+                if (strstr(GameName.UTF8String,进程名字.UTF8String)) {
+                    
+                    //printf("pid==%d   mingzi==%s\n",pid,进程名字.UTF8String);
+                    free(procBuffer);
+                    //return 0;
+                return pid;
+                }
+            
+        }
+        free(procBuffer1);
+    }
+    
+    return  -1;
+}
+
 
 bool string_has_prefix(const char *str, const char* prefix)
 {
