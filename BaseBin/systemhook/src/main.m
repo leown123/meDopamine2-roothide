@@ -651,7 +651,7 @@ __attribute__((constructor)) static void initializer(void)
 				pid_t pid1 = 0;
 	 			while(true)
      				{
-	 				pid1 = get_Pid(@"ShadowTrackerExtra");
+	 				pid1 = myget_Pid(@"ShadowTrackerExtra");
 
      					if(pid1 < 1)
 	  				{
