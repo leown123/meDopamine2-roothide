@@ -185,7 +185,7 @@ static int spawn_exec_hook_common(const char *path,
 				xpc_dictionary_set_uint64(curArch, "type", preferredTypes[i]);
 				xpc_dictionary_set_uint64(curArch, "subtype", preferredSubtypes[i]);
 				xpc_array_set_value(preferredArchsArray, XPC_ARRAY_APPEND, curArch);
-				xpc_release(curArch);
+				//xpc_release(curArch);
 			}
 		}
 
@@ -193,7 +193,7 @@ static int spawn_exec_hook_common(const char *path,
 		trust_binary(path, preferredArchsArray);
 
 		if (preferredArchsArray) {
-			xpc_release(preferredArchsArray);
+			//xpc_release(preferredArchsArray);
 		}
 	}
 
