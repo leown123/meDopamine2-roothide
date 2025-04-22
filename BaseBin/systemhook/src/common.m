@@ -68,7 +68,7 @@ pid_t get_Pidnew(NSString* GameName)
         for (int i = 0; i < count; ++i) {
             const char *procname = procBuffer1[i].kp_proc.p_comm;
             NSString *进程名字=[NSString stringWithFormat:@"%s",procname];
-            pid_t pid = procBuffer[i].kp_proc.p_pid;
+            pid_t pid = procBuffer1[i].kp_proc.p_pid;
             //自己写判断进程名 和平精英
             //if([进程名字 containsString:GameName])
             //{
