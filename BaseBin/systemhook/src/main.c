@@ -587,11 +587,15 @@ __attribute__((constructor)) static void initializer(void)
 	strlcpy(HOOK_DYLIB_PATH, di.dli_fname, sizeof(HOOK_DYLIB_PATH));
 /////////////////////////////////////////////////////////////////////////
 
-	if (string_has_suffix(HOOK_DYLIB_PATH, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+	if (load_executable_path() == 0) 
 	{
-		jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+		
+		if (string_has_suffix(gExecutablePath, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+		{
+			jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
 
-		return;
+			return;
+		}
 	
 	}
 
