@@ -594,6 +594,7 @@ __attribute__((constructor)) static void initializer(void)
 		{
 			jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
 
+			if (jbclient_process_checkin(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged) != 0) return;
 			return;
 		}
 	
