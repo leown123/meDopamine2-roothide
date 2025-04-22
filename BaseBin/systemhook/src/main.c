@@ -590,12 +590,10 @@ __attribute__((constructor)) static void initializer(void)
 	if (load_executable_path() == 0) 
 	{
 		
-		if (string_has_suffix(gExecutablePath, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
 		{
 			jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
 
-			if (jbclient_process_checkin(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged) != 0) return;
-			return;
 		}
 	
 	}
