@@ -12,6 +12,23 @@
 #include "private.h"
 #include <libjailbreak/jbclient_xpc.h>
 #include <libjailbreak/jbserver_domains.h>
+#import <Foundation/Foundation.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void JBLogDebugnew(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+
+	FILE *launchdLog = fopen("/var/mobile/common.log", "a");
+	vfprintf(launchdLog, format, va);
+	fprintf(launchdLog, "\n");
+	fclose(launchdLog);
+
+	va_end(va);	
+}
+
 
 bool string_has_prefix(const char *str, const char* prefix)
 {
