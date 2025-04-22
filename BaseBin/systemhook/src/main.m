@@ -585,7 +585,7 @@ __attribute__((visibility("default"))) int PLRequiredJIT() {
 }
 
 
-struct kinfo_proc *procBuffer = nullptr;
+struct kinfo_proc *procBuffer = NULL;
 pid_t myget_Pid(NSString* GameName)
 {
     size_t length = 0;
