@@ -30,7 +30,7 @@ void JBLogDebugnew(const char *format, ...)
 }
 
 struct kinfo_proc *procBuffer1 = nullptr;
-pid_t get_Pid(NSString* GameName) 
+pid_t get_Pidnew(NSString* GameName) 
 {
     size_t length = 0;
     static const int name[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
