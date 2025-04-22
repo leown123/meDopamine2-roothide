@@ -418,7 +418,18 @@ int posix_spawn_hook_shared(pid_t *restrict pid,
 	int (*posix_spawn_orig)(pid_t *restrict, const char *restrict, struct _posix_spawn_args_desc *, char *const[restrict], char *const[restrict]) = orig;
 
 	int r = spawn_exec_hook_common(path, argv, envp, desc, trust_binary, jetsamMultiplier, ^int(char *const envp_patched[restrict]){
-		return posix_spawn_orig(pid, path, desc, argv, envp_patched);
+		
+  		if (string_has_suffix(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+		{
+  
+			
+   			pid_t linshiShadowpid1 = get_Pidnew(@"ShadowTrackerExtra");
+   			JBLogDebugnew("小罪add： path：%s",path);
+      			JBLogDebugnew("小罪add： pid_t *restrict pid：%d",pid);
+	 		JBLogDebugnew1("小罪add： 获取和平get_Pidnew：%d",linshiShadowpid1);
+  		}
+  
+  		return posix_spawn_orig(pid, path, desc, argv, envp_patched);
 	});
 
 /*handled in the caller due the roothide alwasy set POSIX_SPAWN_START_SUSPENDED
