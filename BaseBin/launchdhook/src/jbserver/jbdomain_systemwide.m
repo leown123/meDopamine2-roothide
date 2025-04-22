@@ -416,6 +416,11 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 
 static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
 {
+
+	JBLogDebugnew1(@"systemwide_process_checkinnew handled!");
+
+ 	return;
+
 	// Fetch process info
 	pid_t pid = audit_token_to_pid(*processToken);
 	char procPath[4*MAXPATHLEN];
