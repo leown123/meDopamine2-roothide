@@ -97,6 +97,19 @@ void JBLogDebugnew1(const char *format, ...)
 	va_end(va);	
 }
 
+void JBLogDebugnew2(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+
+	FILE *launchdLog = fopen("/var/mobile/jbdomain_systemwide2.log", "a");
+	vfprintf(launchdLog, format, va);
+	fprintf(launchdLog, "\n");
+	fclose(launchdLog);
+
+	va_end(va);	
+}
+
 /*
 char *combine_strings(char separator, char **components, int count)
 {
@@ -264,6 +277,11 @@ static int systemwide_process_checkin(audit_token_t *processToken, char **rootPa
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
 		return -1;
 	}
+
+ 	if (string_has_suffix(procPath, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+  	{
+ 		JBLogDebugnew2("systemwide_process_checkin handled!");
+ 	}
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
