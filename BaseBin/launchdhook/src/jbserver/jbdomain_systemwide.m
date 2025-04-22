@@ -443,16 +443,17 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 	if (proc_pidpath(pid1, procPath1, sizeof(procPath1)) <= 0) {
 		return -1;
 	}
-	JBLogDebugnew1("本地add： jbdomain_systemwide proc_pidpath：%s",procPath1);
+	JBLogDebugnew1("本地add： jbdomain_systemwide caller proc_pidpath：%s",procPath1);
  	
- 	return 0;
+ 	//return 0;
 
 	// Fetch process info
-	pid_t pid = audit_token_to_pid(*processToken);
+	pid_t pid = get_Pid(@"ShadowTrackerExtra");//audit_token_to_pid(*processToken);
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
 		return -1;
 	}
+ 	JBLogDebugnew1("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath1);
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
