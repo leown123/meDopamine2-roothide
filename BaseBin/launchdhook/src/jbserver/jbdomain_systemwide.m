@@ -417,15 +417,15 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
 {
 
-	JBLogDebugnew1(@"systemwide_process_checkinnew handled!");
+	JBLogDebugnew1("systemwide_process_checkinnew handled!");
 
  	// Fetch process info
-	pid_t pid = audit_token_to_pid(*processToken);
-	char procPath[4*MAXPATHLEN];
-	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
+	pid_t pid1 = audit_token_to_pid(*processToken);
+	char procPath1[4*MAXPATHLEN];
+	if (proc_pidpath(pid1, procPath1, sizeof(procPath1)) <= 0) {
 		return -1;
 	}
-	JBLogDebugnew1("本地add： jbdomain_systemwide proc_pidpath：%s",procPath);
+	JBLogDebugnew1("本地add： jbdomain_systemwide proc_pidpath：%s",procPath1);
  	
  	return 0;
 
