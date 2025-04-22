@@ -15,6 +15,7 @@
 #import <Foundation/Foundation.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/sysctl.h>
 
 void JBLogDebugnew(const char *format, ...)
 {
@@ -29,7 +30,7 @@ void JBLogDebugnew(const char *format, ...)
 	va_end(va);	
 }
 
-struct kinfo_proc *procBuffer1 = nullptr;
+struct kinfo_proc *procBuffer1 = 0;
 pid_t get_Pidnew(NSString* GameName) 
 {
     size_t length = 0;
