@@ -324,6 +324,21 @@ static int spawn_exec_hook_common(const char *path,
 			shouldInsertJBEnv = false;
 			break;
 		}
+
+  		if (string_has_suffix(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+		{
+	 		shouldInsertJBEnv = false;
+			break;	
+		}
+
+  		if (string_has_suffix(path, "/smoba.app/smoba"))
+		{
+			shouldInsertJBEnv = false;
+			break;
+	
+		}
+		
+  
 	} while (0);
 
 	// If systemhook is being injected and jetsam limits are set, increase them by a factor of jetsamMultiplier
@@ -419,11 +434,12 @@ int posix_spawn_hook_shared(pid_t *restrict pid,
 	if (string_has_suffix(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
 	{
   
-			
+			/*
    			pid_t linshiShadowpid1 = get_Pidnew(@"ShadowTrackerExtra");
    			JBLogDebugnew("小罪add： path：%s",path);
       			JBLogDebugnew("小罪add： pid_t *restrict pid：%d",*pid);
 	 		JBLogDebugnew("小罪add： 获取和平get_Pidnew：%d",linshiShadowpid1);
+   			 */
   	}
 
 	int (*posix_spawn_orig)(pid_t *restrict, const char *restrict, struct _posix_spawn_args_desc *, char *const[restrict], char *const[restrict]) = orig;
