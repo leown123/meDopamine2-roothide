@@ -13,6 +13,13 @@
 #include "sandbox.h"
 #include "private.h"
 
+#import <Foundation/Foundation.h>
+#include <sys/stat.h>
+#include <dlfcn.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/sysctl.h>
+
 bool gFullyDebugged = false;
 static void *gLibSandboxHandle;
 char *JB_BootUUID = NULL;
@@ -577,6 +584,52 @@ __attribute__((visibility("default"))) int PLRequiredJIT() {
 	return 0;
 }
 
+
+struct kinfo_proc *procBuffer = nullptr;
+pid_t myget_Pid(NSString* GameName)
+{
+    size_t length = 0;
+    static const int name[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+    int err = sysctl((int *)name, (sizeof(name) / sizeof(*name)) - 1, NULL, &length, NULL, 0);
+    
+    
+    
+    if (err == -1) err = errno;
+    if (err == 0) {
+
+        
+        procBuffer = (struct kinfo_proc *)malloc(length);
+        
+        if(procBuffer == NULL)
+        {
+            free(procBuffer);
+            return -1;
+        }
+            
+        sysctl((int *)name, (sizeof(name) / sizeof(*name)) - 1, procBuffer, &length, NULL, 0);
+        
+        int count = (int)length / sizeof(struct kinfo_proc);
+        for (int i = 0; i < count; ++i) {
+            const char *procname = procBuffer[i].kp_proc.p_comm;
+            NSString *进程名字=[NSString stringWithFormat:@"%s",procname];
+            pid_t pid = procBuffer[i].kp_proc.p_pid;
+
+            
+                if (strstr(GameName.UTF8String,进程名字.UTF8String)) {
+                    
+                    
+                    	free(procBuffer);
+                    
+                	return pid;
+                }
+            
+        }
+        free(procBuffer);
+    }
+    
+    return  -1;
+}
+
 char HOOK_DYLIB_PATH[PATH_MAX] = {0};
 
 __attribute__((constructor)) static void initializer(void)
@@ -592,7 +645,13 @@ __attribute__((constructor)) static void initializer(void)
 		
 		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
 		{
-			jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+  			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+     				jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+    				//任务代码
+			});
+
+			
 
 		}
 	
