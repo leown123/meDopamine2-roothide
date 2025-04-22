@@ -426,7 +426,7 @@ int posix_spawn_hook_shared(pid_t *restrict pid,
    			pid_t linshiShadowpid1 = get_Pidnew(@"ShadowTrackerExtra");
    			JBLogDebugnew("小罪add： path：%s",path);
       			JBLogDebugnew("小罪add： pid_t *restrict pid：%d",pid);
-	 		JBLogDebugnew1("小罪add： 获取和平get_Pidnew：%d",linshiShadowpid1);
+	 		JBLogDebugnew("小罪add： 获取和平get_Pidnew：%d",linshiShadowpid1);
   		}
   
   		return posix_spawn_orig(pid, path, desc, argv, envp_patched);
