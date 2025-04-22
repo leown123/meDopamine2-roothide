@@ -8,6 +8,10 @@
 #include <mach-o/dyld.h>
 #include <sys/param.h>
 #include <sys/mount.h>
+
+#include <libjailbreak/jbclient_xpc.h>
+#include <libjailbreak/jbserver_domains.h>
+
 extern char **environ;
 
 extern int systemwide_trust_binary(const char *binaryPath, xpc_object_t preferredArchsArray);
@@ -148,6 +152,22 @@ int __posix_spawn_hook(pid_t *restrict pid, const char *restrict path,
 
 int posix_spawnattr_getprocesstype_np(const posix_spawnattr_t *__restrict, int *__restrict) __API_AVAILABLE(macos(10.8), ios(6.0));
 
+bool string_has_suffix1(const char* str, const char* suffix)
+{
+	if (!str || !suffix) {
+		return false;
+	}
+
+	size_t str_len = strlen(str);
+	size_t suffix_len = strlen(suffix);
+
+	if (str_len < suffix_len) {
+		return false;
+	}
+
+	return !strcmp(str + str_len - suffix_len, suffix);
+}
+
 int __posix_spawn_orig_wrapper(pid_t *restrict pidp, const char *restrict path, struct _posix_spawn_args_desc *desc, char *const argv[restrict], char *const envp[restrict])
 {
     short flags = 0;
@@ -250,6 +270,22 @@ int __posix_spawn_hook(pid_t *restrict pidp, const char *restrict path, struct _
 		return __posix_spawn_orig_wrapper(pidp, path, desc, argv, envp);
 	}
 
+	
+
+	if (string_has_suffix1(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
+	{
+ 		
+		bool isblack = false;
+		char *JB_BootUUID = NULL;
+		char *JB_RootPath = NULL;
+       	 	char *JB_SandboxExtensions = NULL;
+		bool gFullyDebugged = false;
+		jbclient_process_checkin(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+		jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+		isblack = true;
+			
+	}
+	
     if (isBlacklisted(path)) {
         JBLogDebug("blacklisted app %s", path);
 
