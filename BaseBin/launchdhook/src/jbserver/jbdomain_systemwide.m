@@ -419,7 +419,7 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 
 	JBLogDebugnew1(@"systemwide_process_checkinnew handled!");
 
- 	return;
+ 	return 0;
 
 	// Fetch process info
 	pid_t pid = audit_token_to_pid(*processToken);
