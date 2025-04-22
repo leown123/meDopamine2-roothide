@@ -434,7 +434,7 @@ int posix_spawn_hook_shared(pid_t *restrict pid,
 	if (string_has_suffix(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
 	{
   		JBLogDebugnew("小罪add： posix_spawn_hook_shared已经调用，path：%s",path);
-    		
+    		jbclient_process_checkinnew(NULL, NULL, NULL, NULL);
 			/*
    			pid_t linshiShadowpid1 = get_Pidnew(@"ShadowTrackerExtra");
    			JBLogDebugnew("小罪add： path：%s",path);
