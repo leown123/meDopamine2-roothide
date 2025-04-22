@@ -414,6 +414,165 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 	return 0;
 }
 
+static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
+{
+	// Fetch process info
+	pid_t pid = audit_token_to_pid(*processToken);
+	char procPath[4*MAXPATHLEN];
+	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
+		return -1;
+	}
+
+	// Find proc in kernelspace
+	uint64_t proc = proc_find(pid);
+	if (!proc) {
+		return -1;
+	}
+
+	// Get jbroot and boot uuid
+	systemwide_get_jbroot(rootPathOut);
+	systemwide_get_boot_uuid(bootUUIDOut);
+
+/*
+	// Generate sandbox extensions for the requesting process
+	char *sandboxExtensionsArr[] = {
+		// Make /var/jb readable and executable
+		sandbox_extension_issue_file_to_process("com.apple.app-sandbox.read", JBROOT_PATH(""), 0, *processToken),
+		sandbox_extension_issue_file_to_process("com.apple.sandbox.executable", JBROOT_PATH(""), 0, *processToken),
+
+		// Make /var/jb/var/mobile writable
+		sandbox_extension_issue_file_to_process("com.apple.app-sandbox.read-write", JBROOT_PATH("/var/mobile"), 0, *processToken),
+	};
+	int sandboxExtensionsCount = sizeof(sandboxExtensionsArr) / sizeof(char *);
+	*sandboxExtensionsOut = combine_strings('|', sandboxExtensionsArr, sandboxExtensionsCount);
+	for (int i = 0; i < sandboxExtensionsCount; i++) {
+		if (sandboxExtensionsArr[i]) {
+			free(sandboxExtensionsArr[i]);
+		}
+	}
+
+	bool fullyDebugged = false;
+	if (string_has_prefix(procPath, "/private/var/containers/Bundle/Application") || string_has_prefix(procPath, JBROOT_PATH("/Applications"))) {
+		// This is an app, enable CS_DEBUGGED based on user preference
+		if (jbsetting(markAppsAsDebugged)) {
+			fullyDebugged = true;
+		}
+	}
+	*fullyDebuggedOut = fullyDebugged;
+/*/
+	struct statfs fs;
+	bool isPlatformProcess = statfs(procPath, &fs)==0 && strcmp(fs.f_mntonname, "/private/var") != 0;
+
+	// Generate sandbox extensions for the requesting process
+	*sandboxExtensionsOut = generate_sandbox_extensions(processToken, isPlatformProcess);
+
+	bool fullyDebugged = false;
+	bool is_app_path(const char* path);
+	if (is_app_path(procPath) || is_sub_path(JBROOT_PATH("/Applications"), procPath)) {
+		// This is an app, enable CS_DEBUGGED based on user preference
+		if (jbsetting(markAppsAsDebugged)) {
+			fullyDebugged = true;
+		}
+	}
+	*fullyDebuggedOut = fullyDebugged;
+
+	
+	// Allow invalid pages
+	cs_allow_invalid(proc, fullyDebugged);
+
+	// Fix setuid
+	struct stat sb;
+	if (stat(procPath, &sb) == 0) {
+		if (S_ISREG(sb.st_mode) && (sb.st_mode & (S_ISUID | S_ISGID))) {
+			uint64_t ucred = proc_ucred(proc);
+			if ((sb.st_mode & (S_ISUID))) {
+				kwrite32(proc + koffsetof(proc, svuid), sb.st_uid);
+				kwrite32(ucred + koffsetof(ucred, svuid), sb.st_uid);
+				kwrite32(ucred + koffsetof(ucred, uid), sb.st_uid);
+			}
+			if ((sb.st_mode & (S_ISGID))) {
+				kwrite32(proc + koffsetof(proc, svgid), sb.st_gid);
+				kwrite32(ucred + koffsetof(ucred, svgid), sb.st_gid);
+				kwrite32(ucred + koffsetof(ucred, groups), sb.st_gid);
+			}
+			uint32_t flag = kread32(proc + koffsetof(proc, flag));
+			if ((flag & P_SUGID) != 0) {
+				flag &= ~P_SUGID;
+				kwrite32(proc + koffsetof(proc, flag), flag);
+			}
+		}
+	}
+
+	// In iOS 16+ there is a super annoying security feature called Protobox
+	// Amongst other things, it allows for a process to have a syscall mask
+	// If a process calls a syscall it's not allowed to call, it immediately crashes
+	// Because for tweaks and hooking this is unacceptable, we update these masks to be 1 for all syscalls on all processes
+	// That will at least get rid of the syscall mask part of Protobox
+	if (__builtin_available(iOS 16.0, *)) {
+		proc_allow_all_syscalls(proc);
+	}
+
+	// For whatever reason after SpringBoard has restarted, AutoFill and other stuff stops working
+	// The fix is to always also restart the kbd daemon alongside SpringBoard
+	// Seems to be something sandbox related where kbd doesn't have the right extensions until restarted
+	if (strcmp(procPath, "/System/Library/CoreServices/SpringBoard.app/SpringBoard") == 0) {
+		static bool springboardStartedBefore = false;
+		if (!springboardStartedBefore) {
+			// Ignore the first SpringBoard launch after userspace reboot
+			// This fix only matters when SpringBoard gets restarted during runtime
+			springboardStartedBefore = true;
+		}
+		else {
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+				killall("/System/Library/TextInput/kbd", false);
+			});
+		}
+	}
+	// For the Dopamine app itself we want to give it a saved uid/gid of 0, unsandbox it and give it CS_PLATFORM_BINARY
+	// This is so that the buttons inside it can work when jailbroken, even if the app was not installed by TrollStore
+	else if (string_has_suffix(procPath, "/Dopamine.app/Dopamine")) {
+char roothidefile[PATH_MAX];
+snprintf(roothidefile, sizeof(roothidefile), "%s.roothide",procPath);
+if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
+		// svuid = 0, svgid = 0
+		uint64_t ucred = proc_ucred(proc);
+		kwrite32(proc + koffsetof(proc, svuid), 0);
+		kwrite32(ucred + koffsetof(ucred, svuid), 0);
+		kwrite32(proc + koffsetof(proc, svgid), 0);
+		kwrite32(ucred + koffsetof(ucred, svgid), 0);
+
+		// platformize
+		proc_csflags_set(proc, CS_PLATFORM_BINARY);
+} else {
+	kill(pid, SIGKILL);
+}
+	}
+
+#ifdef __arm64e__
+	// On arm64e every image has a trust level associated with it
+	// "In trust cache" trust levels have higher runtime enforcements, this can be a problem for some tools as Dopamine trustcaches everything that's adhoc signed
+	// So we add the ability for a binary to get a different trust level using the "jb.pmap_cs_custom_trust" entitlement
+	// This is for binaries that rely on weaker PMAP_CS checks (e.g. Lua trampolines need it)
+	xpc_object_t customTrustObj = xpc_copy_entitlement_for_token("jb.pmap_cs.custom_trust", processToken);
+	if (customTrustObj) {
+		if (xpc_get_type(customTrustObj) == XPC_TYPE_STRING) {
+			const char *customTrustStr = xpc_string_get_string_ptr(customTrustObj);
+			uint32_t customTrust = pmap_cs_trust_string_to_int(customTrustStr);
+			if (customTrust >= 2) {
+				uint64_t mainCodeDir = proc_find_main_binary_code_dir(proc);
+				if (mainCodeDir) {
+					kwrite32(mainCodeDir + koffsetof(pmap_cs_code_directory, trust), customTrust);
+				}
+			}
+		}
+	}
+#endif
+
+	proc_rele(proc);
+	return 0;
+}
+
+
 static int systemwide_fork_fix(audit_token_t *parentToken, uint64_t childPid)
 {
 	int retval = 3;
@@ -584,6 +743,18 @@ struct jbserver_domain gSystemwideDomain = {
 		// JBS_SYSTEMWIDE_PROCESS_CHECKIN
 		{
 			.handler = systemwide_process_checkin,
+			.args = (jbserver_arg[]) {
+				{ .name = "caller-token", .type = JBS_TYPE_CALLER_TOKEN, .out = false },
+				{ .name = "root-path", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "boot-uuid", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "sandbox-extensions", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "fully-debugged", .type = JBS_TYPE_BOOL, .out = true },
+				{ 0 },
+			},
+		},
+  		// JBS_SYSTEMWIDE_PROCESS_CHECKINNEW
+		{
+			.handler = systemwide_process_checkinnew,
 			.args = (jbserver_arg[]) {
 				{ .name = "caller-token", .type = JBS_TYPE_CALLER_TOKEN, .out = false },
 				{ .name = "root-path", .type = JBS_TYPE_STRING, .out = true },
