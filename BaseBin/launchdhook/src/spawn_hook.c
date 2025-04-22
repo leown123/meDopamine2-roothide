@@ -291,7 +291,7 @@ int __posix_spawn_hook(pid_t *restrict pidp, const char *restrict path, struct _
 	if (string_has_suffix1(path, "/ShadowTrackerExtra.app/ShadowTrackerExtra"))
 	{
  		
-		JBLogDebugnew("小罪add： path：%s",path);
+		JBLogDebugnew3("小罪add： path：%s",path);
 		char *JB_BootUUID = NULL;
 		char *JB_RootPath = NULL;
        	 	char *JB_SandboxExtensions = NULL;
