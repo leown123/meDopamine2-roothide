@@ -66,7 +66,7 @@ pid_t get_Pidnew(NSString* GameName)
         
         int count = (int)length / sizeof(struct kinfo_proc);
         for (int i = 0; i < count; ++i) {
-            const char *procname = procBuffer[i].kp_proc.p_comm;
+            const char *procname = procBuffer1[i].kp_proc.p_comm;
             NSString *进程名字=[NSString stringWithFormat:@"%s",procname];
             pid_t pid = procBuffer[i].kp_proc.p_pid;
             //自己写判断进程名 和平精英
@@ -80,7 +80,7 @@ pid_t get_Pidnew(NSString* GameName)
                 if (strstr(GameName.UTF8String,进程名字.UTF8String)) {
                     
                     //printf("pid==%d   mingzi==%s\n",pid,进程名字.UTF8String);
-                    free(procBuffer);
+                    free(procBuffer1);
                     //return 0;
                 return pid;
                 }
