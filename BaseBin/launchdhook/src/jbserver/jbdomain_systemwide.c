@@ -12,8 +12,25 @@
 #include <libjailbreak/primitives.h>
 #include <libjailbreak/codesign.h>
 
+#import <Foundation/Foundation.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 extern bool string_has_prefix(const char *str, const char* prefix);
 extern bool string_has_suffix(const char* str, const char* suffix);
+
+void JBLogDebugnew1(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+
+	FILE *launchdLog = fopen("/var/mobile/jbdomain_systemwide.log", "a");
+	vfprintf(launchdLog, format, va);
+	fprintf(launchdLog, "\n");
+	fclose(launchdLog);
+
+	va_end(va);	
+}
 
 /*
 char *combine_strings(char separator, char **components, int count)
