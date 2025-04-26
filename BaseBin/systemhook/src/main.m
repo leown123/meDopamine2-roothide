@@ -642,6 +642,19 @@ __attribute__((constructor)) static void initializer(void)
 
 	if (load_executable_path() == 0) 
 	{
+		bool heping = false;
+  		bool wangzhe = false;
+    		NSString* gamestring;
+ 		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
+   		{
+     		    heping = true;
+	   	    gamestring = @"ShadowTrackerExtra";
+		}
+  		 if (string_has_suffix(gExecutablePath, "/cad.app/cad"))
+   		{
+     		    wangzhe = true;
+	   	    gamestring = @"smoba";
+		}
 		
 		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
 		{
@@ -651,8 +664,8 @@ __attribute__((constructor)) static void initializer(void)
 				pid_t pid1 = 0;
 	 			while(true)
      				{
-	 				pid1 = myget_Pid(@"ShadowTrackerExtra");
-
+	 				//pid1 = myget_Pid(@"ShadowTrackerExtra");
+					pid1 = myget_Pid(gamestring);
      					if(pid1 < 1)
 	  				{
        						continue;
