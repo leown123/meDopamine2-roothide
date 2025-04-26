@@ -656,7 +656,8 @@ __attribute__((constructor)) static void initializer(void)
 	   	    gamestring = @"smoba";
 		}
 		
-		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
+		//if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
+  		if (heping == true || wangzhe == true;)
 		{
   			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
