@@ -644,6 +644,7 @@ __attribute__((constructor)) static void initializer(void)
 	{
 		bool heping = false;
   		bool wangzhe = false;
+    		bool sanjiao = false;
     		NSString* gamestring;
  		if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
    		{
@@ -659,12 +660,12 @@ __attribute__((constructor)) static void initializer(void)
 
   		if (string_has_suffix(gExecutablePath, "/sjz.app/sjz"))
    		{
-     		    wangzhe = true;
+     		    sanjiao = true;
 	   	    gamestring = @"DeltaForceClient";
 		}
 		
 		//if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
-  		if (heping == true || wangzhe == true)
+  		if (heping == true || wangzhe == true || sanjiao == true)
 		{
   			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
