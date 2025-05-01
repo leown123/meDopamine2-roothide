@@ -454,6 +454,11 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
  	{
   		pid = get_Pid(@"smoba");//audit_token_to_pid(*processToken);
 	}
+
+ 	if(pid<1)
+ 	{
+  		pid = get_Pid(@"DeltaForceClient");//audit_token_to_pid(*processToken);
+	}
  
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
@@ -550,41 +555,8 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 		proc_allow_all_syscalls(proc);
 	}
 
-	// For whatever reason after SpringBoard has restarted, AutoFill and other stuff stops working
-	// The fix is to always also restart the kbd daemon alongside SpringBoard
-	// Seems to be something sandbox related where kbd doesn't have the right extensions until restarted
-	if (strcmp(procPath, "/System/Library/CoreServices/SpringBoard.app/SpringBoard") == 0) {
-		static bool springboardStartedBefore = false;
-		if (!springboardStartedBefore) {
-			// Ignore the first SpringBoard launch after userspace reboot
-			// This fix only matters when SpringBoard gets restarted during runtime
-			springboardStartedBefore = true;
-		}
-		else {
-			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-				killall("/System/Library/TextInput/kbd", false);
-			});
-		}
-	}
-	// For the Dopamine app itself we want to give it a saved uid/gid of 0, unsandbox it and give it CS_PLATFORM_BINARY
-	// This is so that the buttons inside it can work when jailbroken, even if the app was not installed by TrollStore
-	else if (string_has_suffix(procPath, "/Dopamine.app/Dopamine")) {
-char roothidefile[PATH_MAX];
-snprintf(roothidefile, sizeof(roothidefile), "%s.roothide",procPath);
-if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
-		// svuid = 0, svgid = 0
-		uint64_t ucred = proc_ucred(proc);
-		kwrite32(proc + koffsetof(proc, svuid), 0);
-		kwrite32(ucred + koffsetof(ucred, svuid), 0);
-		kwrite32(proc + koffsetof(proc, svgid), 0);
-		kwrite32(ucred + koffsetof(ucred, svgid), 0);
-
-		// platformize
-		proc_csflags_set(proc, CS_PLATFORM_BINARY);
-} else {
-	kill(pid, SIGKILL);
-}
-	}
+	
+	
 
 #ifdef __arm64e__
 	// On arm64e every image has a trust level associated with it
