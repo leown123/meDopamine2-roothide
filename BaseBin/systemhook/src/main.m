@@ -650,10 +650,17 @@ __attribute__((constructor)) static void initializer(void)
      		    heping = true;
 	   	    gamestring = @"ShadowTrackerExtra";
 		}
-  		 if (string_has_suffix(gExecutablePath, "/cad.app/cad"))
+  
+  		if (string_has_suffix(gExecutablePath, "/cad.app/cad"))
    		{
      		    wangzhe = true;
 	   	    gamestring = @"smoba";
+		}
+
+  		if (string_has_suffix(gExecutablePath, "/sjz.app/sjz"))
+   		{
+     		    wangzhe = true;
+	   	    gamestring = @"DeltaForceClient";
 		}
 		
 		//if (string_has_suffix(gExecutablePath, "/debugserver.app/debugserver"))
