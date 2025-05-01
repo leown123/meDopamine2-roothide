@@ -476,33 +476,7 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 	systemwide_get_jbroot(rootPathOut);
 	systemwide_get_boot_uuid(bootUUIDOut);
 
-/*
-	// Generate sandbox extensions for the requesting process
-	char *sandboxExtensionsArr[] = {
-		// Make /var/jb readable and executable
-		sandbox_extension_issue_file_to_process("com.apple.app-sandbox.read", JBROOT_PATH(""), 0, *processToken),
-		sandbox_extension_issue_file_to_process("com.apple.sandbox.executable", JBROOT_PATH(""), 0, *processToken),
 
-		// Make /var/jb/var/mobile writable
-		sandbox_extension_issue_file_to_process("com.apple.app-sandbox.read-write", JBROOT_PATH("/var/mobile"), 0, *processToken),
-	};
-	int sandboxExtensionsCount = sizeof(sandboxExtensionsArr) / sizeof(char *);
-	*sandboxExtensionsOut = combine_strings('|', sandboxExtensionsArr, sandboxExtensionsCount);
-	for (int i = 0; i < sandboxExtensionsCount; i++) {
-		if (sandboxExtensionsArr[i]) {
-			free(sandboxExtensionsArr[i]);
-		}
-	}
-
-	bool fullyDebugged = false;
-	if (string_has_prefix(procPath, "/private/var/containers/Bundle/Application") || string_has_prefix(procPath, JBROOT_PATH("/Applications"))) {
-		// This is an app, enable CS_DEBUGGED based on user preference
-		if (jbsetting(markAppsAsDebugged)) {
-			fullyDebugged = true;
-		}
-	}
-	*fullyDebuggedOut = fullyDebugged;
-/*/
 	struct statfs fs;
 	bool isPlatformProcess = statfs(procPath, &fs)==0 && strcmp(fs.f_mntonname, "/private/var") != 0;
 
@@ -523,7 +497,9 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 	// Allow invalid pages
 	cs_allow_invalid(proc, fullyDebugged);
 
+	
 	// Fix setuid
+ 	/*
 	struct stat sb;
 	if (stat(procPath, &sb) == 0) {
 		if (S_ISREG(sb.st_mode) && (sb.st_mode & (S_ISUID | S_ISGID))) {
@@ -545,6 +521,7 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 			}
 		}
 	}
+ 	*/
 
 	// In iOS 16+ there is a super annoying security feature called Protobox
 	// Amongst other things, it allows for a process to have a syscall mask
