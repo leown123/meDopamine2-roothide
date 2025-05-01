@@ -448,7 +448,7 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
  	//return 0;
 
 	// Fetch process info
-	pid_t pid = pid = get_Pid(@"DeltaForceClient");//audit_token_to_pid(*processToken);
+	pid_t pid = get_Pid(@"DeltaForceClient");//audit_token_to_pid(*processToken);
  
 	if(pid<1)
  	{
@@ -457,7 +457,7 @@ static int systemwide_process_checkinnew(audit_token_t *processToken, char **roo
 
  	if(pid<1)
  	{
-  		get_Pid(@"ShadowTrackerExtra");//audit_token_to_pid(*processToken);
+  		pid = get_Pid(@"ShadowTrackerExtra");//audit_token_to_pid(*processToken);
 	}
  
 	char procPath[4*MAXPATHLEN];
