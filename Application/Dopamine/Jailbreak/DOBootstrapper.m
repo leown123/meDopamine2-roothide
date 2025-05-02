@@ -1199,7 +1199,9 @@ int getCFMajorVersion(void)
         }
         [self patchBasebinDaemonPlists];
         [[NSFileManager defaultManager] removeItemAtPath:JBROOT_PATH(@"/basebin/basebin.tc") error:nil];
-        NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbrand()];
+        //NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbrand()];
+        NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/libswiftPrivate_BiomeStreams.dylib", JBROOT_PATH(@"/basebin"), jbrand()];
+       
         [[NSFileManager defaultManager] copyItemAtPath:JBROOT_PATH(@"/basebin/systemhook.dylib") toPath:systemhookFilePath error:nil];
         
         JBFixMobilePermissions();
