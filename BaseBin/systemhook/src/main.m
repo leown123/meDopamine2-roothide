@@ -643,13 +643,6 @@ __attribute__((constructor)) static void initializer(void)
 	if (load_executable_path() == 0) 
 	{
 
-		if (string_has_suffix(gExecutablePath, "/DeltaForceClient.app/DeltaForceClient"))
-   		{
-     		    jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
-	   	    return;
-		}
-
- 
 		bool heping = false;
   		bool wangzhe = false;
     		bool sanjiao = false;
