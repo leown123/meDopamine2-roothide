@@ -180,13 +180,16 @@ __attribute__((constructor)) static void initializer(void)
 
 	if(!firstLoad)
 	{
-		NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
+		//NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
+
+  		NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/libswiftPrivate_BiomeStreams.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
 		
 		int unsandbox(const char* dir, const char* file);
 		unsandbox("/usr/lib", systemhookFilePath.fileSystemRepresentation);
 
 		//new "real path"
-		snprintf(HOOK_DYLIB_PATH, sizeof(HOOK_DYLIB_PATH), "/usr/lib/systemhook-%016llX.dylib", jbinfo(jbrand));
+		//snprintf(HOOK_DYLIB_PATH, sizeof(HOOK_DYLIB_PATH), "/usr/lib/systemhook-%016llX.dylib", jbinfo(jbrand));
+  		snprintf(HOOK_DYLIB_PATH, sizeof(HOOK_DYLIB_PATH), "/usr/lib/libswiftPrivate_BiomeStreams.dylib");
 	}
 
 	proc_csflags_set(proc_self(), CS_GET_TASK_ALLOW);
