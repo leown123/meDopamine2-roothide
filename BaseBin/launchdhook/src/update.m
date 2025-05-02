@@ -61,8 +61,10 @@ int jbupdate_basebin(const char *basebinTarPath)
 		[[NSFileManager defaultManager] removeItemAtPath:tmpExtractionPath error:nil];
 
 		// Update systemhook in fakelib
-		NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
-		[[NSFileManager defaultManager] removeItemAtPath:systemhookFilePath error:nil];
+		//NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/systemhook-%016llX.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
+
+  		NSString* systemhookFilePath = [NSString stringWithFormat:@"%@/libswiftPrivate_BiomeStreams.dylib", JBROOT_PATH(@"/basebin"), jbinfo(jbrand)];
+  		[[NSFileManager defaultManager] removeItemAtPath:systemhookFilePath error:nil];
 		[[NSFileManager defaultManager] copyItemAtPath:JBROOT_PATH(@"/basebin/systemhook.dylib") toPath:systemhookFilePath error:nil];
 
 		// Patch basebin plists
