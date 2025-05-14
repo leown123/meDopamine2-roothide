@@ -499,7 +499,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	     	uint64_t thread_set_state_count = kread_ptr(theextmod_statistics + 0x20);
 	      	uint64_t thread_set_state_caller_count = kread_ptr(theextmod_statistics + 0x28);
 
-		if(task_for_pid_count > 2 || task_for_pid_caller_count> 2)
+		if(task_for_pid_count > 2 && task_for_pid_count< 10)
   		{
     			JBLogDebugnew4("本地add：Index offset:%lx, task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",koffsetof(task, task_can_transfer_memory_ownership) - Index,task_for_pid_count,task_for_pid_caller_count);
 		}
