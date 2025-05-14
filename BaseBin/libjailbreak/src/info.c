@@ -169,10 +169,10 @@ void jbinfo_initialize_hardcoded_offsets(void)
 		// task
 #ifdef __arm64e__
 		gSystemInfo.kernelStruct.task.task_can_transfer_memory_ownership = 0x5B0 + taskJitboxAdjust;
-		gSystemInfo.kernelStruct.task.extmod_statistics = 0x5B0 - 0x130 + taskJitboxAdjust;
+		gSystemInfo.kernelStruct.task.extmod_statistics = 0x5B0 - 0x118 + taskJitboxAdjust;
 #else
 		gSystemInfo.kernelStruct.task.task_can_transfer_memory_ownership = 0x590;
-		gSystemInfo.kernelStruct.task.extmod_statistics = 0x590 - 0x130;
+		gSystemInfo.kernelStruct.task.extmod_statistics = 0x590 - 0x118;
 #endif
 
 		// ipc_port
@@ -205,10 +205,10 @@ void jbinfo_initialize_hardcoded_offsets(void)
 			// task
 #ifdef __arm64e__
 			gSystemInfo.kernelStruct.task.task_can_transfer_memory_ownership = 0x580 + taskJitboxAdjust;
-			gSystemInfo.kernelStruct.task.extmod_statistics = 0x580 - 0x130 + taskJitboxAdjust;
+			gSystemInfo.kernelStruct.task.extmod_statistics = 0x580 - 0x118 + taskJitboxAdjust;
 #else
 			gSystemInfo.kernelStruct.task.task_can_transfer_memory_ownership = 0x560;
-			gSystemInfo.kernelStruct.task.extmod_statistics = 0x560 - 0x130;
+			gSystemInfo.kernelStruct.task.extmod_statistics = 0x560 - 0x118;
 #endif
 			if (strcmp(xnuVersion, "21.4.0") >= 0) { // iOS 15.4+
 				// proc
