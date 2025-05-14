@@ -498,6 +498,8 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	JBLogDebugnew3("本地add： task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
 
  	if (proc)  proc_rele(proc);
+
+  	return 0;
 }
 
 static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
