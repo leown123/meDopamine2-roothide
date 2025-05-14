@@ -186,6 +186,7 @@ struct system_info {
 			uint32_t task_can_transfer_memory_ownership;
 			uint32_t mach_trap_filter_mask;
 			uint32_t mach_kobj_filter_mask;
+			uint32_t extmod_statistics;
 		} task;
 
 		struct {
