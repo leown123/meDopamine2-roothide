@@ -110,7 +110,7 @@ void JBLogDebugnew2(const char *format, ...)
 	va_end(va);	
 }
 
-void JBLogDebugnew3(const char *format, ...)
+void JBLogDebugnew4(const char *format, ...)
 {
 	va_list va;
 	va_start(va, format);
@@ -448,7 +448,7 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 static int systemwide_process_hacktask(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
 {
 
-	JBLogDebugnew3("systemwide_process_hacktask handled!");
+	JBLogDebugnew4("systemwide_process_hacktask handled!");
 
  	// Fetch process info
 	pid_t pid1 = audit_token_to_pid(*processToken);
@@ -456,7 +456,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	if (proc_pidpath(pid1, procPath1, sizeof(procPath1)) <= 0) {
 		return -1;
 	}
-	JBLogDebugnew3("本地add： jbdomain_systemwide caller proc_pidpath：%s",procPath1);
+	JBLogDebugnew4("本地add： jbdomain_systemwide caller proc_pidpath：%s",procPath1);
  	
  	//return 0;
 
@@ -477,7 +477,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
 		return -1;
 	}
- 	JBLogDebugnew3("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath);
+ 	JBLogDebugnew4("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath);
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
@@ -495,7 +495,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
      	uint64_t thread_set_state_count = kread64(theextmod_statistics + 0x20);
       	uint64_t thread_set_state_caller_count = kread64(theextmod_statistics + 0x28);
 
- 	JBLogDebugnew3("本地add： task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
+ 	JBLogDebugnew4("本地add： task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
 
  	if (proc)  proc_rele(proc);
 
