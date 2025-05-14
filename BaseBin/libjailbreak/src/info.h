@@ -412,6 +412,7 @@ extern struct system_info gSystemInfo;
 	iterator(ctx, kernelStruct.task.threads); \
 	iterator(ctx, kernelStruct.task.itk_space); \
 	iterator(ctx, kernelStruct.task.task_can_transfer_memory_ownership); \
+	iterator(ctx, kernelStruct.task.extmod_statistics); \
 	iterator(ctx, kernelStruct.task.mach_trap_filter_mask); \
 	iterator(ctx, kernelStruct.task.mach_kobj_filter_mask); \
 	\
