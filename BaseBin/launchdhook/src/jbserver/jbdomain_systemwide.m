@@ -490,18 +490,18 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	for (int Index = 0; Index < 0x200; Index++)
     	{
 	     		
-		uint64_t theextmod_statistics = kread_ptr(theTask + koffsetof(task, task_can_transfer_memory_ownership) - Index);
+		uint64_t theextmod_statistics = theTask + koffsetof(task, task_can_transfer_memory_ownership) - Index;
 	
-	 	uint64_t task_for_pid_count = kread64(theextmod_statistics + 0);
-	  	uint64_t task_for_pid_caller_count = kread64(theextmod_statistics + 0x8);
-	   	uint64_t thread_creation_count = kread64(theextmod_statistics + 0x10);
-	    	uint64_t thread_creation_caller_count = kread64(theextmod_statistics + 0x18);
-	     	uint64_t thread_set_state_count = kread64(theextmod_statistics + 0x20);
-	      	uint64_t thread_set_state_caller_count = kread64(theextmod_statistics + 0x28);
+	 	uint64_t task_for_pid_count = kread_ptr(theextmod_statistics + 0);
+	  	uint64_t task_for_pid_caller_count = kread_ptr(theextmod_statistics + 0x8);
+	   	uint64_t thread_creation_count = kread_ptr(theextmod_statistics + 0x10);
+	    	uint64_t thread_creation_caller_count = kread_ptr(theextmod_statistics + 0x18);
+	     	uint64_t thread_set_state_count = kread_ptr(theextmod_statistics + 0x20);
+	      	uint64_t thread_set_state_caller_count = kread_ptr(theextmod_statistics + 0x28);
 
 		if(task_for_pid_count > 2 || task_for_pid_caller_count> 2)
   		{
-    			JBLogDebugnew4("本地add：Index:%lx, task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",Index,task_for_pid_count,task_for_pid_caller_count);
+    			JBLogDebugnew4("本地add：Index offset:%lx, task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",koffsetof(task, task_can_transfer_memory_ownership) - Index,task_for_pid_count,task_for_pid_caller_count);
 		}
   		
 	 	
