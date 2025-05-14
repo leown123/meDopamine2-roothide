@@ -16,6 +16,7 @@ int jbclient_trust_binary(const char *binaryPath, xpc_object_t preferredArchsArr
 int jbclient_trust_library(const char *libraryPath, void *addressInCaller);
 int jbclient_process_checkin(char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut);
 int jbclient_process_checkinnew(char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut);
+int jbclient_process_hacktask(char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut);
 int jbclient_fork_fix(uint64_t childPid);
 int jbclient_cs_revalidate(void);
 int jbclient_jbsettings_get(const char *key, xpc_object_t *valueOut);
