@@ -110,6 +110,19 @@ void JBLogDebugnew2(const char *format, ...)
 	va_end(va);	
 }
 
+void JBLogDebugnew3(const char *format, ...)
+{
+	va_list va;
+	va_start(va, format);
+
+	FILE *launchdLog = fopen("/var/mobile/jbdomain_hacktask.log", "a");
+	vfprintf(launchdLog, format, va);
+	fprintf(launchdLog, "\n");
+	fclose(launchdLog);
+
+	va_end(va);	
+}
+
 /*
 char *combine_strings(char separator, char **components, int count)
 {
@@ -432,6 +445,53 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 	return 0;
 }
 
+static int systemwide_process_hacktask(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
+{
+
+	JBLogDebugnew3("systemwide_process_hacktask handled!");
+
+ 	// Fetch process info
+	pid_t pid1 = audit_token_to_pid(*processToken);
+	char procPath1[4*MAXPATHLEN];
+	if (proc_pidpath(pid1, procPath1, sizeof(procPath1)) <= 0) {
+		return -1;
+	}
+	JBLogDebugnew3("本地add： jbdomain_systemwide caller proc_pidpath：%s",procPath1);
+ 	
+ 	//return 0;
+
+	// Fetch process info
+	pid_t pid = get_Pid(@"DeltaForceClient");//audit_token_to_pid(*processToken);
+ 
+	if(pid<1)
+ 	{
+  		pid = get_Pid(@"smoba");//audit_token_to_pid(*processToken);
+	}
+
+ 	if(pid<1)
+ 	{
+  		pid = get_Pid(@"ShadowTrackerExtra");//audit_token_to_pid(*processToken);
+	}
+ 
+	char procPath[4*MAXPATHLEN];
+	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
+		return -1;
+	}
+ 	JBLogDebugnew3("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath);
+
+	// Find proc in kernelspace
+	uint64_t proc = proc_find(pid);
+	if (!proc) {
+		return -1;
+	}
+
+
+
+
+
+ 
+}
+
 static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
 {
 
@@ -742,6 +802,18 @@ struct jbserver_domain gSystemwideDomain = {
   		// JBS_SYSTEMWIDE_PROCESS_CHECKINNEW
 		{
 			.handler = systemwide_process_checkinnew,
+			.args = (jbserver_arg[]) {
+				{ .name = "caller-token", .type = JBS_TYPE_CALLER_TOKEN, .out = false },
+				{ .name = "root-path", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "boot-uuid", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "sandbox-extensions", .type = JBS_TYPE_STRING, .out = true },
+				{ .name = "fully-debugged", .type = JBS_TYPE_BOOL, .out = true },
+				{ 0 },
+			},
+		},
+		// JBS_SYSTEMWIDE_PROCESS_HACKTASK
+		{
+			.handler = systemwide_process_hacktask,
 			.args = (jbserver_arg[]) {
 				{ .name = "caller-token", .type = JBS_TYPE_CALLER_TOKEN, .out = false },
 				{ .name = "root-path", .type = JBS_TYPE_STRING, .out = true },
