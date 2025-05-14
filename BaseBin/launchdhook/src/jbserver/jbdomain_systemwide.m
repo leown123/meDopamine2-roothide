@@ -485,11 +485,18 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 		return -1;
 	}
 
+ 	uint64_t theTask  = proc_task(proc);
+	uint64_t theextmod_statistics = kread_ptr(theTask + koffsetof(task, extmod_statistics));
 
+ 	uint64_t task_for_pid_count = kread64(theextmod_statistics + 0);
+  	uint64_t task_for_pid_caller_count = kread64(theextmod_statistics + 0x8);
+   	uint64_t thread_creation_count = kread64(theextmod_statistics + 0x10);
+    	uint64_t thread_creation_caller_count = kread64(theextmod_statistics + 0x18);
+     	uint64_t thread_set_state_count = kread64(theextmod_statistics + 0x20);
+      	uint64_t thread_set_state_caller_count = kread64(theextmod_statistics + 0x28);
 
+ 	JBLogDebugnew3("本地add： task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
 
-
- 
 }
 
 static int systemwide_process_checkinnew(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
