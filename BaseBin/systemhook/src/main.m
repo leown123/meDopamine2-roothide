@@ -685,6 +685,8 @@ __attribute__((constructor)) static void initializer(void)
 	  				else
        					{
 	    				    jbclient_process_checkinnew(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+	     			            jbclient_process_hacktask(&JB_RootPath, &JB_BootUUID, &JB_SandboxExtensions, &gFullyDebugged);
+
 	     				    return;
     					    //任务代码
 					}
