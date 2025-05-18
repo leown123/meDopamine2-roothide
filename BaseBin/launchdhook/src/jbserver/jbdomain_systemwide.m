@@ -472,6 +472,11 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	{
   		pid = get_Pid(@"ShadowTrackerExtra");//audit_token_to_pid(*processToken);
 	}
+
+ 	if(pid<1)
+ 	{
+  		pid = get_Pid(@"UAGame");//audit_token_to_pid(*processToken);
+	}
  
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
