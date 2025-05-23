@@ -542,7 +542,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
        uint64_t theproc = kread_ptr(theTask + 0x390);
        if(theproc == proc)
 	{
-	   kwrite32(theTask + 0x390, procobd);
+	   kwrite64(theTask + 0x390, procobd);
   	}
 	
    	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
