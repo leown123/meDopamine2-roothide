@@ -523,7 +523,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	 	
      	}
 	
-   	kwrite32(proc + koffsetof(proc, pid), pidsecond);
+   	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
 
  	if (proc)  proc_rele(proc);
 
