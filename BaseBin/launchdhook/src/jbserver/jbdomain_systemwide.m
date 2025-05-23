@@ -477,6 +477,8 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	{
   		pid = get_Pid(@"UAGame");//audit_token_to_pid(*processToken);
 	}
+
+  	pid_t pidsecond =  pid + 1;
  
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
@@ -521,7 +523,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	 	
      	}
 	
-   	kwrite32(proc + koffsetof(proc, pid), pid+1);
+   	kwrite32(proc + koffsetof(proc, pid), pidsecond);
 
  	if (proc)  proc_rele(proc);
 
