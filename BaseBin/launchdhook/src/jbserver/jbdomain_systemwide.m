@@ -478,7 +478,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
   		pid = get_Pid(@"UAGame");//audit_token_to_pid(*processToken);
 	}
 
-  	pid_t pidsecond =  pid + 1;
+  	
  
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
@@ -523,6 +523,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	 	
      	}
 
+ 	/*
       	for (int Index = 0; Index < 0x500; Index++)
     	{
      		uint64_t theproc = kread_ptr(theTask + Index);
@@ -532,10 +533,22 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	
 		}
      	}
+     	 */
+
+       pid_t pidsecond  = get_Pid(@"OBD");//
+
+       uint64_t procobd = proc_find(pidsecond);
+
+       uint64_t theproc = kread_ptr(theTask + 0x390);
+       if(theproc == proc)
+	{
+	   kwrite32(theTask + 0x390, procobd);
+  	}
 	
    	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
 
  	if (proc)  proc_rele(proc);
+  	if (procobd)  proc_rele(procobd);
 
   	return 0;
 }
