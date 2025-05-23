@@ -520,7 +520,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	  		kwrite64(theextmod_statistics +0x20, 0);
        			kwrite64(theextmod_statistics + 0x28, 0);
 
-   			
+   			/*
 		       //pid_t pidsecond  = get_Pid(@"OBD");//
 		
 		       //uint64_t procobd = proc_find(pidsecond);
@@ -532,6 +532,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 		  	}
 			
 		   	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
+      			*/
 		}
 	 	
      	}
