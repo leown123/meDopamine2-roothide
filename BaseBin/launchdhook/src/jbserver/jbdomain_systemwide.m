@@ -522,6 +522,16 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 		}
 	 	
      	}
+
+      	for (int Index = 0; Index < 0x500; Index++)
+    	{
+     		uint64_t theproc = kread_ptr(theTask + Index);
+       		if(theproc == proc)
+	 	{
+   			JBLogDebugnew4("本地add：Index offset:%lx, theproc ：%ld",Index,theproc);
+	
+		}
+     	}
 	
    	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
 
