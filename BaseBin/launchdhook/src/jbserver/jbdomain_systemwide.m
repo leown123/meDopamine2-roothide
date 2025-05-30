@@ -542,7 +542,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	 	
   		for (int Index = 0; Index < 0x8; Index++)
     		{
-     			uint64_t task_writes_counters_internalcount = kread_ptr(ref_countadd + Index * 8);
+     			uint64_t task_writes_counters_internalcount = kread_ptr(task_writes_counters_internaladd + Index * 8);
        			//if(theproc == proc)
 	 		{
    				JBLogDebugnew4("本地add：task_writes_counters_internal Index offset:0x%lx, task_writes_counters_internalcount ：%d",Index * 4,task_writes_counters_internalcount);
