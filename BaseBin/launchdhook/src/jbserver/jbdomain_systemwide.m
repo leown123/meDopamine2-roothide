@@ -497,9 +497,9 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	//for (int Index = 0; Index < 0x200; Index++)
     	{
      		
-       		uint64_t ref_countadd = theTask + 0x10;
+       		uint64_t ref_countadd = theTask;
 
-  		for (int Index = 0; Index < 0x18; Index++)
+  		for (int Index = 0; Index < 0x60; Index++)
     		{
      			uint32_t ref_count = kread32(ref_countadd + Index);
        			//if(theproc == proc)
