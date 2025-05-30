@@ -498,7 +498,18 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
     	{
      		
        		uint64_t ref_countadd = theTask + 0x10;
-	 	kwrite32(ref_countadd, 0);
+
+  		for (int Index = 0; Index < 0x18; Index++)
+    		{
+     			uint32_t ref_count = kread32(ref_countadd + Index);
+       			//if(theproc == proc)
+	 		{
+   				JBLogDebugnew4("本地add：ref_count Index offset:%lx, ref_count ：%d",Index,ref_count);
+	
+			}
+     		}
+  		
+	 	//kwrite32(ref_countadd, 0);
 	     		
 		uint64_t theextmod_statistics = theTask + koffsetof(task, task_can_transfer_memory_ownership) - 0x128;
 	
