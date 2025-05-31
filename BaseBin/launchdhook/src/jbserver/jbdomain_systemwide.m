@@ -561,7 +561,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
        			//if(theproc == proc)
 	 		{
    				JBLogDebugnew4("本地add：ref_countcount Index offset:0x%lx, ref_countcount ：%d",Index,ref_countcount);
-				kwrite64(task_writes_counters_internaladd + Index * 8, 0);
+				//kwrite64(task_writes_counters_internaladd + Index * 8, 0);
 			}
      		}
 	 	//kwrite32(ref_countadd, 0);
