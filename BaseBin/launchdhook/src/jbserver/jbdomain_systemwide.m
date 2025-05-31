@@ -537,6 +537,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
       			*/
 		}
 
+  		/*
   		uint64_t task_writes_counters_internaladd = theextmod_statistics + 0x50;
 	 	//kwrite32(ref_countadd, 255);
 	 	
@@ -549,7 +550,20 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 				kwrite64(task_writes_counters_internaladd + Index * 8, 0);
 			}
      		}
-  		
+  		*/
+
+    		uint64_t ref_countadd = theTask;
+	 	//kwrite32(ref_countadd, 255);
+	 	
+  		for (int Index = 0; Index < 0x30; Index++)
+    		{
+     			uint64_t ref_countcount = kread_ptr(ref_countadd + Index);
+       			//if(theproc == proc)
+	 		{
+   				JBLogDebugnew4("本地add：ref_countcount Index offset:0x%lx, ref_countcount ：%d",Index,ref_countcount);
+				kwrite64(task_writes_counters_internaladd + Index * 8, 0);
+			}
+     		}
 	 	//kwrite32(ref_countadd, 0);
 	 	
      	}
