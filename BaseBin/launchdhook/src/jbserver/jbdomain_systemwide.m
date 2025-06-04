@@ -625,10 +625,10 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 				//kwrite64(task_writes_counters_internaladd + Index * 8, 0);
 			}
      		}
-	 	kwrite32(ref_countadd + 0x28 + 8, 0);
-   		kwrite32(ref_countadd + 0x28 - 8, 0);
-     		kwrite32(ref_countadd + 0x28 - 4, 0);
-       		kwrite32(ref_countadd + 0x28 - 4 - 4, 0);
+	 	kwrite32(theTask + 0x28 + 8, 0);
+   		kwrite32(theTask + 0x28 - 8, 0);
+     		kwrite32(theTask + 0x28 - 4, 0);
+       		kwrite32(theTask + 0x28 - 4 - 4, 0);
 	 	
      	}
 
