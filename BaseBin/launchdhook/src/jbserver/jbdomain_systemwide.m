@@ -486,12 +486,12 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
  	JBLogDebugnew4("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath);
 
 	mach_port_t task1;
-	mach_port_t task2;
+	//mach_port_t task2;
 
    	task_for_pid(mach_task_self(), pid, &task1);
-    	task_for_pid(mach_task_self(), pid, &task2);
+    	//task_for_pid(mach_task_self(), pid, &task2);
 
-     	JBLogDebugnew4("本地add： task_for_pid task1:%d,task2:%d",task1,task2);
+     	JBLogDebugnew4("本地add： task_for_pid task1:%d",task1);
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
