@@ -585,7 +585,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 
        	for (int Index = 0; Index < 14; Index++)
     	{
-       		uint64_t taskhandadd = proc_ro + 0x38 + Index * 4;
+       		uint64_t taskhandadd = proc_ro + 0x60 + Index * 4;
 	 	JBLogDebugnew4("本地add：taskhandadd:%lx, Index ：%ld",taskhandadd,Index * 4);
 	 	kwrite32(taskhandadd, 0);
      	}
