@@ -446,6 +446,50 @@ if(access(roothidefile, F_OK)==0 && !gFirstLoad) {
 	return 0;
 }
 
+mach_port_t task_for_pid_workaround(int Pid)
+{
+  
+  host_t        myhost = mach_host_self(); // host self is host priv if you're root anyway..
+  mach_port_t   psDefault;
+  mach_port_t   psDefault_control;
+
+  task_array_t  tasks;
+  mach_msg_type_number_t numTasks;
+  int i;
+
+   thread_array_t       threads;
+   thread_info_data_t   tInfo;
+
+  kern_return_t kr;
+
+  kr = processor_set_default(myhost, &psDefault);
+
+  kr = host_processor_set_priv(myhost, psDefault, &psDefault_control);
+ if (kr != KERN_SUCCESS) {
+     //fprintf(stderr, "host_processor_set_priv failed with error %x\n", kr);
+     //mach_error("host_processor_set_priv",kr);
+     //exit(1);
+     return 0;
+ }
+
+  //printf("So far so good\n");
+
+  kr = processor_set_tasks(psDefault_control, &tasks, &numTasks);
+  if (kr != KERN_SUCCESS) {
+      return 0;
+  }
+
+  for (i = 0; i < numTasks; i++)
+        {
+                int pid;
+                pid_for_task(tasks[i], &pid);
+                //printf("TASK %d PID :%d\n", i,pid);
+                if (pid == Pid) return (tasks[i]);
+        }
+
+   return (MACH_PORT_NULL);
+}
+
 static int systemwide_process_hacktask(audit_token_t *processToken, char **rootPathOut, char **bootUUIDOut, char **sandboxExtensionsOut, bool *fullyDebuggedOut)
 {
 
@@ -487,8 +531,8 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 
 	mach_port_t task1;
 	//mach_port_t task2;
-
-   	task_for_pid(mach_task_self(), pid, &task1);
+	task1 = task_for_pid_workaround(pid);
+   	//task_for_pid(mach_task_self(), pid, &task1);
     	//task_for_pid(mach_task_self(), pid, &task2);
 
      	JBLogDebugnew4("本地add： task_for_pid task1:%d",task1);
