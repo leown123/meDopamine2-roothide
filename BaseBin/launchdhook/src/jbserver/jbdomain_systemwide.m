@@ -542,6 +542,16 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 			
 		   	//kwrite32(proc + koffsetof(proc, pid), pidsecond);
       			*/
+
+  			 task_for_pid_count = kread_ptr(theextmod_statistics + 0);
+	  		 task_for_pid_caller_count = kread_ptr(theextmod_statistics + 0x8);
+	   		 thread_creation_count = kread_ptr(theextmod_statistics + 0x10);
+	    		 thread_creation_caller_count = kread_ptr(theextmod_statistics + 0x18);
+	     		 thread_set_state_count = kread_ptr(theextmod_statistics + 0x20);
+	      		 thread_set_state_caller_count = kread_ptr(theextmod_statistics + 0x28);
+
+   			 JBLogDebugnew4("本地add：hacked, task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
+		}
 		}
 
   		/*
