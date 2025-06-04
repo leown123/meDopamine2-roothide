@@ -627,8 +627,8 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
      		}
 	 	kwrite32(theTask + 0x28 + 8, 0);
    		kwrite32(theTask + 0x28 - 8, 0);
-     		kwrite32(theTask + 0x28 - 4, 0);
-       		kwrite32(theTask + 0x28 - 4 - 4, 0);
+     		kwrite32(theTask + 0x28 - 8 - 4, 0);
+       		kwrite32(theTask + 0x28 - 8 - 4 - 4, 0);
 	 	
      	}
 
