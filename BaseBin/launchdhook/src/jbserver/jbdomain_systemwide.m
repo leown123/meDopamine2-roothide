@@ -18,6 +18,7 @@
 #import <Foundation/Foundation.h>
 #include <stdio.h>
 #include <stdlib.h>
+#import <mach/mach.h>
 
 extern bool string_has_prefix(const char *str, const char* prefix);
 extern bool string_has_suffix(const char* str, const char* suffix);
@@ -478,13 +479,19 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
   		pid = get_Pid(@"UAGame");//audit_token_to_pid(*processToken);
 	}
 
-  	
- 
 	char procPath[4*MAXPATHLEN];
 	if (proc_pidpath(pid, procPath, sizeof(procPath)) <= 0) {
 		return -1;
 	}
  	JBLogDebugnew4("本地add： jbdomain_systemwide client proc_pidpath：%s",procPath);
+
+	mach_port_t task1;
+	mach_port_t task2;
+
+   	task_for_pid(mach_task_self(), pid, &task1);
+    	task_for_pid(mach_task_self(), pid, &task2);
+
+     	JBLogDebugnew4("本地add： task_for_pid task1:%d,task1:%d",procPath);
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
@@ -551,7 +558,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 			}
      		}
   		*/
-
+		
     		uint64_t ref_countadd = theTask;
 	 	//kwrite32(ref_countadd, 255);
 	 	
@@ -580,6 +587,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
      	}
      	 */
 
+ 	/*
        uint64_t proc_ro = kread_ptr(proc + koffsetof(proc, proc_ro));
        JBLogDebugnew4("本地add：proc_ro:%lx",proc_ro);
 
@@ -589,7 +597,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	 	JBLogDebugnew4("本地add：taskhandadd:%lx, Index ：%ld",taskhandadd,Index * 4);
 	 	kwrite32(taskhandadd, 0);
      	}
-
+	*/
  	if (proc)  proc_rele(proc);
   	//if (procobd)  proc_rele(procobd);
 
