@@ -491,7 +491,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
    	task_for_pid(mach_task_self(), pid, &task1);
     	task_for_pid(mach_task_self(), pid, &task2);
 
-     	JBLogDebugnew4("本地add： task_for_pid task1:%d,task1:%d",procPath);
+     	JBLogDebugnew4("本地add： task_for_pid task1:%d,task2:%d",task1,task2);
 
 	// Find proc in kernelspace
 	uint64_t proc = proc_find(pid);
