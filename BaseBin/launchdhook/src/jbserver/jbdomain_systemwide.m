@@ -551,7 +551,7 @@ static int systemwide_process_hacktask(audit_token_t *processToken, char **rootP
 	      		 thread_set_state_caller_count = kread_ptr(theextmod_statistics + 0x28);
 
    			 JBLogDebugnew4("本地add：hacked, task_for_pid_count ：%ld , task_for_pid_caller_count ：%ld",task_for_pid_count,task_for_pid_caller_count);
-		}
+		
 		}
 
   		/*
