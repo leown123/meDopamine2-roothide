@@ -59,10 +59,10 @@ int jbclient_initialize_primitives_internal_jumo(bool physrwPTE)
 		uint64_t asidPtr = 0;
 		if (jbclient_root_get_physrw(physrwPTE, &asidPtr) == 0) {
 			if (physrwPTE) {
-				libjailbreak_physrw_pte_init(true, asidPtr);
+				libjailbreak_physrw_pte_init(false, asidPtr);
 			}
 			else {
-				libjailbreak_physrw_init(true);
+				libjailbreak_physrw_init(false);
 			}
 			libjailbreak_translation_init();
 			libjailbreak_IOSurface_primitives_init();
