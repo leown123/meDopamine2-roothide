@@ -177,5 +177,9 @@ bool isBlacklisted(const char* path)
     if(!path) return NO;
     NSString* identifier = getAppIdentifierFromPath(path);
     if(!identifier) return NO;
+	if([identifier isEqualToString:@"com.tencent.tmgp.dfm"] || [identifier isEqualToString:@"com.tencent.mqq"])
+	{
+	  return true;
+	}
     return isBlacklistedApp(identifier);
 }
